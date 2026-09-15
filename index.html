@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MENU CLIENT — babach.net</title>
+<style>
+  *{box-sizing:border-box}
+  body{
+    margin:0;min-height:100vh;color:#ffd84d;font-family:Arial,Helvetica,sans-serif;
+    background:#050505;
+    overflow-x:hidden;
+    animation:bgPulse 6s ease-in-out infinite alternate;
+  }
+  @keyframes bgPulse{
+    0%{
+      background:
+        radial-gradient(circle at 20% 20%,rgba(255,205,40,.18),transparent 28%),
+        radial-gradient(circle at 80% 80%,rgba(255,170,0,.12),transparent 30%),
+        #050505;
+    }
+    100%{
+      background:
+        radial-gradient(circle at 80% 20%,rgba(255,205,40,.12),transparent 30%),
+        radial-gradient(circle at 20% 80%,rgba(255,170,0,.18),transparent 28%),
+        #1b1604;
+    }
+  }
+  body:before{
+    content:"";position:fixed;inset:0;pointer-events:none;opacity:.35;
+    background-image:radial-gradient(#ffd84d 1px,transparent 1px);
+    background-size:38px 38px;
+    mask-image:linear-gradient(to bottom,black,transparent 85%);
+  }
+  .wrap{width:min(920px,92%);margin:0 auto;padding:45px 0 70px}
+  .hero{text-align:center;margin-bottom:30px}
+  h1{
+    margin:0;font-size:clamp(42px,8vw,78px);letter-spacing:6px;
+    color:#ffe26b;text-shadow:0 0 8px #ffbd00,0 0 24px #ff9d00,0 0 48px #ff7b00;
+  }
+  .creator{margin-top:10px;color:#d8d8d8;letter-spacing:3px;font-size:14px}
+  .creator b{color:#ffd02f;text-shadow:0 0 12px #ffb300}
+  .panel{
+    border:1px solid rgba(255,204,45,.45);border-radius:20px;padding:24px;
+    background:linear-gradient(145deg,rgba(30,25,8,.96),rgba(7,7,7,.98));
+    box-shadow:0 0 25px rgba(255,176,0,.12),inset 0 0 35px rgba(255,190,0,.04);
+  }
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}
+  button{
+    width:100%;padding:18px;border-radius:13px;border:1px solid #a87900;
+    color:#ffe36b;background:linear-gradient(145deg,#171307,#090909);
+    font-size:16px;font-weight:800;letter-spacing:1px;cursor:pointer;
+    box-shadow:0 0 12px rgba(255,190,0,.08);transition:.2s;
+  }
+  button:hover{transform:translateY(-2px);border-color:#ffd43b;box-shadow:0 0 22px rgba(255,190,0,.3)}
+  .big{grid-column:1/-1;font-size:21px;padding:23px;border-color:#d49c00;
+       background:linear-gradient(90deg,#171000,#251900,#171000)}
+  .confirm{margin-top:15px;background:linear-gradient(90deg,#4b3500,#8d6500,#4b3500);color:#fff2a6}
+  .status{min-height:25px;text-align:center;margin-top:17px;color:#9dff8d;font-weight:bold;text-shadow:0 0 10px #4dff36}
+  .modal{
+    display:none;position:fixed;inset:0;background:rgba(0,0,0,.78);
+    align-items:center;justify-content:center;padding:20px;z-index:10;
+  }
+  .modal.show{display:flex}
+  .box{
+    width:min(650px,100%);max-height:85vh;overflow:auto;padding:25px;
+    border:1px solid #d8a800;border-radius:18px;background:#0b0b0b;
+    box-shadow:0 0 40px rgba(255,190,0,.3),inset 0 0 25px rgba(255,190,0,.05);
+  }
+  .box h2{margin-top:0;color:#ffe06a;text-shadow:0 0 15px #ffad00}
+  .close{float:right;width:auto;padding:8px 13px;font-size:13px}
+  .phones{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:15px 0}
+  .phone{padding:10px;border:1px solid #3f320d;border-radius:8px;background:#121109;color:#ddd;font-size:13px}
+  .phone:hover{transform:none;border-color:#ffd43b}
+  .dpi{margin:18px 0;text-align:center;font-size:34px;font-weight:900;color:#fff06c;text-shadow:0 0 20px #ff9d00}
+  .range-row{margin:18px 0}.range-row label{display:flex;justify-content:space-between;margin-bottom:8px;color:#eee}
+  input[type=range]{width:100%;accent-color:#ffc400}
+  .note{color:#cfcfcf;line-height:1.6}
+  @media(max-width:650px){.grid{grid-template-columns:1fr}.big{grid-column:auto}.phones{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <h1>MENU CLIENT</h1>
+    <div class="creator">CRE : <b>babach.net</b></div>
+  </header>
+
+  <main class="panel">
+    <div class="grid">
+      <button onclick="success('Nhẹ Tâm')">NHẸ TÂM</button>
+      <button onclick="showDPI()">DPI</button>
+      <button onclick="openSensitivity()">ĐỘ NHẠY TÙY CHỈNH</button>
+      <button onclick="showFixLag()">FIX LAG</button>
+      <button class="big" onclick="showAim()">⚡ AIM CLIENT ⚡</button>
+    </div>
+    <button class="confirm" onclick="success('XÁC NHẬN')">XÁC NHẬN</button>
+    <div id="status" class="status"></div>
+  </main>
+</div>
+
+<div id="modal" class="modal" onclick="if(event.target===this)closeModal()">
+  <div class="box">
+    <button class="close" onclick="closeModal()">ĐÓNG</button>
+    <div id="content"></div>
+  </div>
+</div>
+
+<script>
+  // Âm thanh "tít" mỗi khi nhấn nút — Web Audio API, không cần file MP3.
+  let audioCtx = null;
+  function playBeep(){
+    try{
+      audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+      if(audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      const now = audioCtx.currentTime;
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(880, now);
+      osc.frequency.exponentialRampToValueAtTime(1180, now + 0.07);
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.exponentialRampToValueAtTime(0.12, now + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.13);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + 0.14);
+    }catch(e){}
+  }
+  document.addEventListener('click', e => {
+    if(e.target.closest('button')) playBeep();
+  });
+
+const modal=document.getElementById('modal'), content=document.getElementById('content');
+const status=document.getElementById('status');
+
+function openModal(html){content.innerHTML=html;modal.classList.add('show')}
+function closeModal(){modal.classList.remove('show')}
+function success(name){
+  status.textContent='✓ ĐÃ THÀNH CÔNG — '+name;
+  setTimeout(()=>status.textContent='',2500);
+}
+let selectedPhone = null;
+
+function showDPI(){
+  const phones=[
+    'iPhone 6','iPhone 6 Plus','iPhone 6s','iPhone 6s Plus','iPhone SE (1st gen)',
+    'iPhone 7','iPhone 7 Plus','iPhone 8','iPhone 8 Plus','iPhone X',
+    'iPhone XR','iPhone XS','iPhone XS Max','iPhone 11','iPhone 11 Pro',
+    'iPhone 11 Pro Max','iPhone SE (2nd gen)','iPhone 12','iPhone 12 mini',
+    'iPhone 12 Pro','iPhone 12 Pro Max','iPhone 13','iPhone 13 mini',
+    'iPhone 13 Pro','iPhone 13 Pro Max','iPhone SE (3rd gen)','iPhone 14',
+    'iPhone 14 Plus','iPhone 14 Pro','iPhone 14 Pro Max','iPhone 15',
+    'iPhone 15 Plus','iPhone 15 Pro','iPhone 15 Pro Max','iPhone 16',
+    'iPhone 16 Plus','iPhone 16 Pro','iPhone 16 Pro Max','iPhone 16e'
+  ];
+
+  openModal(`<h2>DPI CLIENT</h2>
+    <p class="note">Hãy chọn dòng iPhone trước, sau đó bấm <b>XÁC NHẬN</b> để nhận DPI ngẫu nhiên từ <b>30–40</b>.</p>
+    <div class="phones">${phones.map((p,i)=>
+      `<button class="phone" onclick="selectPhone(this,'${p.replace(/'/g,"\\'")}')">${p}</button>`
+    ).join('')}</div>
+    <div id="selectedPhone" class="note" style="margin:16px 0;text-align:center">Chưa chọn thiết bị</div>
+    <button onclick="confirmDPI()">✓ XÁC NHẬN THIẾT BỊ</button>
+    <div id="dpiResult"></div>`);
+}
+
+function selectPhone(btn,name){
+  selectedPhone=name;
+  document.querySelectorAll('.phone').forEach(b=>b.style.borderColor='#3f320d');
+  btn.style.borderColor='#ffd43b';
+  document.getElementById('selectedPhone').innerHTML='Đã chọn: <b>'+name+'</b>';
+}
+
+function confirmDPI(){
+  const result=document.getElementById('dpiResult');
+  if(!selectedPhone){
+    result.innerHTML='<p style="color:#ff7777;text-align:center">⚠ Vui lòng chọn một dòng iPhone trước.</p>';
+    return;
+  }
+  const dpi=Math.floor(Math.random()*11)+30;
+  result.innerHTML=`
+    <div class="dpi" style="margin-bottom:5px">DPI ${dpi}</div>
+    <p class="note" style="text-align:center">Thiết bị: <b>${selectedPhone}</b></p>
+    <p style="color:#9dff8d;text-align:center;font-weight:bold">✓ ĐÃ XÁC NHẬN & HIỂN THỊ DPI</p>`;
+}
+
+function openSensitivity(){
+  openModal(`<h2>ĐỘ NHẠY TÙY CHỈNH</h2>
+  <p class="note">Điều chỉnh theo cảm giác chơi của bạn. Giá trị chỉ được lưu trong trang này.</p>
+  ${[['Tổng quát','sens1',80],['Red Dot','sens2',75],['Ống ngắm 2x','sens3',70],['Ống ngắm 4x','sens4',65],['AWM / Sniper','sens5',55],['Nhìn xung quanh','sens6',80]].map(x=>
+  `<div class="range-row"><label><span>${x[0]}</span><b id="${x[1]}v">${x[2]}</b></label>
+  <input type="range" min="0" max="100" value="${x[2]}" oninput="document.getElementById('${x[1]}v').textContent=this.value"></div>`).join('')}
+  <button onclick="closeModal();success('ĐỘ NHẠY')">XÁC NHẬN ĐỘ NHẠY</button>`);
+}
+function showFixLag(){
+  openModal(`<h2>FIX LAG</h2>
+  <p class="note">✓ Tối ưu máy và thải các độ rung tâm hiệu quả.</p>
+  <p class="note">✓ Giảm tác vụ nền không cần thiết trong phạm vi trang web.</p>
+  <p class="note">⚠ Sau khi ấn nút này, vào game hãy bật <b>chế độ thử nghiệm</b> nhé — mới fix lag được.</p>
+  <button onclick="closeModal();success('FIX LAG')">KÍCH HOẠT</button>`);
+}
+function showAim(){
+  openModal(`<h2>⚡ AIM CLIENT ⚡</h2>
+  <p class="note">Buff lên đầu nhẹ hơn, tăng hiệu suất xác suất vào đầu cao hơn nhưng có thể bị tụt FPS, hiệu suất CPU.</p>
+  <p class="note">Hiển thị thêm: trạng thái AIM CLIENT • FPS • CPU • cấu hình hiện tại.</p>
+  <p class="note"><small>Đây là giao diện mô phỏng; trang HTML không can thiệp trực tiếp vào game hay phần cứng.</small></p>
+  <button onclick="closeModal();success('AIM CLIENT')">BẬT AIM CLIENT</button>`);
+}
+</script>
+</body>
+</html>
